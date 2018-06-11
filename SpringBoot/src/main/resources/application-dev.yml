@@ -1,0 +1,33 @@
+#================================================== tomcat配置========================================================#
+server:
+  port: 8081
+  context-path: "/SpringBoot"
+
+
+#================================================== 数据源配置========================================================#
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.31.37:3306/gril?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123580dG
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+#================================================== 自定义参数配置========================================================#
+gril:
+  cupSize: A
+  age: 10
+  content: "测试"
+
+
+#================================================== 日志========================================================#
+#logging:
+#  pattern:
+#    console: "%d - %msg%n"
+#  path: D:\log\springboot
+#  file: D:\log\springboot\springboot.log
+#  level:
+#    com.icypt.learning.log.LogTest: debug
