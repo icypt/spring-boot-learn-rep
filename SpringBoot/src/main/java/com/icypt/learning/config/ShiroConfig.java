@@ -1,6 +1,8 @@
 package com.icypt.learning.config;
 
 
+import com.icypt.learning.shiro.cache.RedisCacheShiroManager;
+import com.icypt.learning.shiro.cache.ShiroCache;
 import com.icypt.learning.shiro.realm.ShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
@@ -98,6 +100,7 @@ public class ShiroConfig {
         //设置realm
         securityManager.setRealm(myShiroRealm());
         securityManager.setRememberMeManager(rememberMeManager());
+        securityManager.setCacheManager(redisCacheShiroManager());
         return securityManager;
     }
 
@@ -131,13 +134,10 @@ public class ShiroConfig {
 
     //注入缓存
     @Bean
-    public EhCacheManager ehCacheManager(){
-        System.out.println("ShiroConfiguration.getEhCacheManager()执行");
-        EhCacheManager cacheManager=new EhCacheManager();
-        cacheManager.setCacheManagerConfigFile("classpath:config/ehcache-shiro.xml");
-        return cacheManager;
+    public RedisCacheShiroManager redisCacheShiroManager(){
+        RedisCacheShiroManager redisCacheShiroManager = new RedisCacheShiroManager();
+        return redisCacheShiroManager;
     }
-
     /**
      * 开启shiro aop注解支持.
      * 使用代理方式;所以需要开启代码支持;否则@RequiresRoles等注解无法生效
