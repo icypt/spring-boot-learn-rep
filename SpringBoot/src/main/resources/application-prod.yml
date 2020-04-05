@@ -1,6 +1,0 @@
-server:
-  port: 8082
-  context-path: "/SpringBoot"
-cupSize: B
-age: 10
-content: HeHe
