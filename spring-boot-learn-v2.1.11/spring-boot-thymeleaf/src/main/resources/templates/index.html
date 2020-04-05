@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:Fw="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>welcome spring boot</title>
+    <style th:inline="css">
+        .test {
+            background-color: #EEEEEE;
+            height: 24px;
+            font-size: 16px;
+        }
+        /*css内嵌*/
+        .[[${testClass}]] {
+            background-color: red;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+<h3>自定义标签</h3>
+<Fw:select id="sex" name="sex" colVal="dict_value" colText="dict_label" tableName="dict_demo" options=" where dict_type = 'sex'" value="1"/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<h3>获取属性文件普通内容--th:text</h3>
+<p th:text="#{welcome}"></p>
+
+<h3>获取属性文件html内容--th:utext</h3>
+<p th:utext="#{welcomeHtml}"></p>
+
+<h3>定义样式标签--th:class</h3>
+<p th:class="test">定义样式标签</p>
+
+<h3>定义常用标签--th:name、th:id、th:value</h3>
+<p >
+    <!-- 基本和html属性保持一致，在前加th:即可 -->
+    <input th:id="user" th:name="user" th:placeholder="请输入用户名" th:value="''">
+</p>
+
+<h3>自定义属性标签--th:attr</h3>
+<p>
+    <!-- 可以定义任何的属性 <input data-filter="test">-->
+    <input th:attr="data-filter='test'"/>
+    <!--<img th:attr="src=@{/images/test.png},title='冰点IT',alt='冰点IT',height='50%'" />-->
+</p>
+
+<h3>变量表达式--${...}</h3>
+<p><span th:text="${testVariables}"></span></p>
+
+<h3>选择变量表达式--*{...}</h3>
+<p>
+    <div th:object="${person}">
+        <p>姓名：<span th:text="*{name}"></span></p>
+        <p>年龄：<span th:text="*{desc}"></span></p>
+    </div>
+</p>
+
+<h3>链接表达式--@{...}、th:href</h3>
+<p>
+    <!-- 最终转化结果： 'http://localhost:8080/gtvg/order/details?orderId=3'  -->
+    <a href="details.html"
+       th:href="@{http://localhost:8080/gtvg/order/details(orderId=${person.id})}">view</a>
+
+    <!-- 最终转化结果：  '/gtvg/order/details?orderId=3'  -->
+    <a href="details.html" th:href="@{/order/details(orderId=${person.id})}">view</a>
+
+    <!-- 最终转化结果： '/gtvg/order/details/3'  -->
+    <a href="details.html" th:href="@{/order/details/{orderId}(orderId=${person.id})}">view</a>
+</p>
+
+<h3>片段表达式</h3>
+<p>
+  <!-- 将片段内容元素注解插入目标元素 <div><footer>公共页脚</footer></div>-->
+  <div th:insert="~{/common/fragment :: footer('test', '测试')}"> </div>
+  <!-- 将目标元素替换为片段内容元素 <footer>公共页脚</footer>-->
+  <div th:replace="~{/common/fragment :: footer('test', '测试')}">  </div>
+  <!-- 只将片段内容包含至目标元素 <div>公共页脚</div>-->
+  <div th:include="~{/common/fragment :: footer('test', '测试')}">  </div>
+</p>
+<h3>字面量</h3>
+<p>
+    <div>数字：<span th:text="2018 + 2"></span></div>
+    <div>字符串：<span th:text="'2018' + '2'"></span></div>
+</p>
+<h3>追加和前置</h3>
+<p>
+    <!-- 最终渲染追加效果 <input type="button" value="Do it!" class="btn warning" /> -->
+    <input type="button" value="append" class="btn" th:attrappend="class=${' ' + cssStyle}" />
+    <!-- 最终渲染前置效果 <input type="button" value="Do it!" class="warning btn" /> -->
+    <input type="button" value="prepending" class="btn" th:attrprepend="class=${cssStyle + ' '}" />
+</p>
+<h3>迭代语法--th:each</h3>
+<p>
+    <table width="40%" cellpadding="0" cellspacing="0" border="1">
+        <tr>
+            <td>姓名</td>
+            <td>描述</td>
+            <td width="70%">其他</td>
+        </tr>
+        <tr th:each="per : ${personList}">
+            <td th:text="${per.name}"></td>
+            <td th:text="${per.desc}"></td>
+            <td th:text="
+            '索引：' + ${perStat.index} +
+            '，数量：' +  ${perStat.count} +
+            '，当前变量：' + ${perStat.current} +
+            '，是否为第一个列表元素：' +  ${perStat.first} +
+            '，是否为最后一个元素：' + ${perStat.last} +
+            '，count是否为偶数' + ${perStat.even} +
+            '，count是否为奇数' + ${perStat.odd} +
+            '，列表元素总数：' + ${perStat.size}
+    "></td>
+        </tr>
+    </table>
+</p>
+
+<h3>遍历Map集合</h3>
+<p>
+    <ul style="list-style-type: none" th:each="per: ${personMap}">
+        <li th:text="'key---' + ${perStat.current.key} + ', value---' + ${perStat.current.value}"></li>
+    </ul>
+</p>
+
+<h3>条件判断--th:if</h3>
+<p>
+    <div>运算符文本别名：gt (>), lt (<), ge (>=), le (<=), not (!). Also eq (==), neq/ne (!=)</div>
+    <h4>th:if 判断为true规则</h4>
+    <ul style="list-style-type: decimal">
+        <li>布尔值为true则为true</li>
+        <li>非0数字则为true</li>
+        <li>任意字符则为true</li>
+        <li>非“false”, “off” or “no”字符串则为true</li>
+        <li>如果为null则为false</li>
+    </ul>
+    <table width="40%" cellpadding="0" cellspacing="0" border="1">
+        <tr>
+            <td>姓名</td>
+            <td>描述</td>
+            <td>操作</td>
+        </tr>
+        <tr th:each="per : ${personList}">
+            <td th:text="${per.name}"></td>
+            <td th:text="${per.desc}"></td>
+            <td><a href="#" th:if="${per.id == '2' && per.name == '李四'}">view</a></td>
+        </tr>
+    </table>
+</p>
+
+<h3>switch语句--th:switch</h3>
+<p>
+    q
+</p>
+
+<h3>本地变量--th:with</h3>
+<p th:with="arg1='val1',arg2='val2'">
+    <!--/*/
+    <span th:text="${testVariables} + '--' + ${arg2}"></span>
+    /*/-->
+</p>
+
+<h3>js内嵌用法</h3>
+<p>
+    <script>
+        var arg1 = '[[${testVariables}]]';
+        console.log(arg1);
+    </script>
+</p>
+
+<h3>css内嵌用法</h3>
+<p th:class="${testClass}"></p>
+
+<h3>获取参数的四种方式</h3>
+<p>
+    <ul style="list-style-type: decimal">
+        <li>获取请求属性：<span th:text="${testVariables}"></span></li>
+        <li>获取session属性：<span th:text="${session.sessionAttr}"></span></li>
+        <li>请求提交的参数：<span th:text="${param.test}"></span></li>
+        <li>获取servlet上下文属性：<span th:text="${application.applicationAttr}"></span></li>
+    </ul>
+</p>
+
+<h3>工具对象使用</h3>
+<p>
+    <ul style="list-style-type: decimal">
+        <li>日期格式化：<span th:text="${#dates.format(currentTime, 'yyyy-MM-dd HH:mm:ss.SSS')}"></span></li>
+        <li>金额格式化：<span th:text="${#numbers.formatCurrency(200001.12)}"></span></li>
+        <li>list判断为空：<span th:if="${not #lists.isEmpty(personList)}" th:text="'不为空'"></span></li>
+    </ul>
+</p>
+</body>
+</html>

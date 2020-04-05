@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>统一错误页面，error.html</h1>
+<script th:src="@{/jquery/jquery-3.4.1.min.js}"></script>
+<script>
+    $.ajax({
+        type: "get",
+        data: {},
+        dataType: "xml",
+        url: "[[@{/x/x}]]",
+        error: function (data) {
+            console.log(data)
+        }
+    })
+</script>
+</body>
+</html>

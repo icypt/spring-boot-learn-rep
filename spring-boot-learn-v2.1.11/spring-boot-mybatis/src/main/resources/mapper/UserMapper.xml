@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.icypt.sboot.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.icypt.sboot.entity.User" >
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+
+  <sql id="Base_Column_List" >
+    user_id, user_name
+  </sql>
+  <select id="findById" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from learn_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteById">
+    delete from learn_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+    insert into learn_user (user_id, user_name)
+    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateById">
+    update learn_user
+    <set >
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <insert id="batchInsert">
+    insert into learn_user(user_name) values
+    <foreach collection="userList" separator="," item="user">
+      (#{user.userName})
+    </foreach>
+  </insert>
+
+  <select id="findByIds" resultMap="BaseResultMap">
+    select * from learn_user where user_id in
+    <foreach collection="ids" item="id" separator="," open="("  close=")">
+      #{id}
+    </foreach>
+  </select>
+
+  <resultMap id="userCompanyInfo" type="com.icypt.sboot.dto.UserDTO">
+    <result property="userId" column="user_id"/>
+    <result property="userName" column="user_name"/>
+    <association property="company" javaType="com.icypt.sboot.entity.Company" column="company_id">
+      <result property="companyId" column="company_id"/>
+      <result property="companyName" column="company_name"/>
+    </association>
+  </resultMap>
+
+  <resultMap id="userBlogInfo" type="com.icypt.sboot.dto.UserDTO">
+    <result property="userId" column="user_id"/>
+    <result property="userName" column="user_name"/>
+    <collection property="blogList" ofType="com.icypt.sboot.entity.Blog">
+      <result property="blogId" column="blog_id"/>
+      <result property="blogName" column="blog_Name"/>
+    </collection>
+  </resultMap>
+
+
+  <select id="getUserCompanyInfo" resultMap="userCompanyInfo">
+    select * from  learn_user lu, learn_company lc
+    where lu.company_id = lc.company_id  and  lu.user_id = #{userId}
+  </select>
+
+  <select id="getUserBlogInfo" resultMap="userBlogInfo">
+    select * from  learn_user lu,  learn_blog lb
+    where  lu.user_id = lb.user_id  and  lu.user_id = #{userId}
+  </select>
+
+</mapper>

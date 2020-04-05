@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="~{/base/base::header('分布式session登录首页','')}">
+</head>
+<body>
+<section class="container">
+    <p>
+        <h1>
+            欢迎<span style="color: green;padding: 0px 5px" th:text="${userInfo.userName}"></span>来到springboot redis learn
+        </h1>
+    </p>
+    <a class="btn btn-danger" href="toLoginOut">注销</a>
+</section>
+<footer th:include="~{/base/base::footer}"/>
+</body>
+</html>

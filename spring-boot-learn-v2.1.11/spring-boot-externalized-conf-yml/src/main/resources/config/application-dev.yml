@@ -1,0 +1,19 @@
+server:
+  port: 8000
+db:
+  name: ceshi
+spring:
+  security:
+    user:
+      password: "secret"
+
+acme:
+  enabled: true
+  remote-address: 192.168.1.1
+  security:
+    username: test
+    password: 123
+    roles:
+      - abc
+      - edf
+      - cfg

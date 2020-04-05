@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.icypt.sboot</groupId>
+		<artifactId>spring-boot-learn-v2.1.11</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>spring-boot-dev-tools</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<!-- spring-boot-devtools 开发者工具依赖 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+	
+	<!-- 细节一、spring-boot-maven-plugin 在没有添加任何的包版本管理依赖时，
+通过mvn:install|package生成的jar文件不是一个可执行的jar文件，
+除非你使用spring-boot-starter-parent父POM，
+否则想要生成可执行的jar文件则需要增加<executions/>节点并设置为<goal>repackage</goal>。 -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

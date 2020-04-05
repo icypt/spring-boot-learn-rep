@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    active: dev
+---
+spring:
+  profiles: test
+server:
+  port: 8761
+name: test
+---
+spring:
+  profiles: pro
+server:
+  port: 7900
+name: pro
+---
+spring:
+  profiles: dev
+server:
+  port: 7901
+name: dev
+app:
+  desc:

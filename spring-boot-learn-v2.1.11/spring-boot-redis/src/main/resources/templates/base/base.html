@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<header th:fragment="header(title, links)">
+    <meta charset="UTF-8">
+    <title th:text="${title}">welcome spring boot</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.css}">
+    <th:block th:replace="${links}" />
+</header>
+<footer th:fragment="footer">
+    <script type="text/javascript" th:src="@{/jquery/jquery-3.4.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</footer>
+</body>
+</html>

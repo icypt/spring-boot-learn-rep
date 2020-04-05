@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:Fw="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>welcome spring boot</title>
+</head>
+<body>
+<footer th:fragment="footer(arg1, arg2)">
+    公共页脚-传入参数：<span th:text="${arg1}"></span> -- <span th:text="${arg2}"></span>
+</footer>
+</body>
+</html>

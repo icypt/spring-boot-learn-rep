@@ -1,0 +1,12 @@
+#logging.file=./test.log
+#logging.file.max-size=3MB
+#logging.file.max-history=1
+#logging.level.root=error
+#logging.group.contoller=com.icypt.sboot.controller
+#logging.level.contoller=debug
+#logging.level.com.icypt.sboot.controller.UserController=debug
+#logging.register-shutdown-hook=true
+logging.config=classpath:./logback/logback-init.xml
+
+
+
