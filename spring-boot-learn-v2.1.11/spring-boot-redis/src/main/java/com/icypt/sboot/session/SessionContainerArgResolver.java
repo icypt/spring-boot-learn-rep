@@ -1,19 +1,19 @@
 package com.icypt.sboot.session;
 
 import com.icypt.sboot.common.CookieUtil;
-import com.icypt.sboot.session.UserInfo;
+import com.icypt.sboot.common.SessionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
 /**
@@ -26,31 +26,28 @@ import java.io.Serializable;
  * URL: www.icypt.com
  */
 @Component
-public class UserInfoArgResolver implements HandlerMethodArgumentResolver {
+public class SessionContainerArgResolver implements HandlerMethodArgumentResolver {
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
-
+    private SessionContainerService sessionContainerService;
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return methodParameter.getParameterType() == UserInfo.class;
+        return methodParameter.getParameterType() == SessionContainer.class;
     }
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
                                   NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
-        String mToken = request.getParameter("token");
-        String cToken = CookieUtil.getCookieValue(request, "token");
-        String token = StringUtils.isBlank(cToken)? mToken: cToken;
-        if(StringUtils.isBlank(token)) {
+        Object mToken = request.getAttribute(SessionUtil.COOKIE_SC_KEY);
+        if(mToken == null) {
             return null;
         }
         //根据token信息查询session信息存在，则将session信息放置model，便也视图使用
-        UserInfo userInfo = (UserInfo) redisTemplate.opsForValue().get("token_" + token);
-        if(userInfo != null) {
-            modelAndViewContainer.addAttribute("userInfo", userInfo);
-            return userInfo;
+        SessionContainer sc = sessionContainerService.get(mToken+"");
+        if(sc != null) {
+            modelAndViewContainer.addAttribute("sc", sc);
+            return sc;
         }
         return null;
     }

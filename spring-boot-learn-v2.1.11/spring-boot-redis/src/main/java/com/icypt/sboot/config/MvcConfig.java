@@ -1,7 +1,8 @@
 package com.icypt.sboot.config;
 
+import com.icypt.sboot.session.SessionContainer;
+import com.icypt.sboot.session.SessionContainerArgResolver;
 import com.icypt.sboot.session.SessionFilter;
-import com.icypt.sboot.session.UserInfoArgResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -34,7 +35,7 @@ public class MvcConfig implements WebMvcConfigurer {
     private String excludeUrl;
 
     @Autowired
-    private UserInfoArgResolver userInfoArgResolver;
+    private SessionContainerArgResolver sessionContainerArgResolver;
 
 
     /**
@@ -43,7 +44,7 @@ public class MvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(userInfoArgResolver);
+        resolvers.add(sessionContainerArgResolver);
     }
 
     /**
